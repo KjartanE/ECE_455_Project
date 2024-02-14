@@ -1,0 +1,5 @@
+Project: project_1
+Converter: IARProjectParser
+Date: 20240213
+
+Failed to parse IAR project format file, if possible please send the Project.ewp file together with the workspace log file to Atollic support.
