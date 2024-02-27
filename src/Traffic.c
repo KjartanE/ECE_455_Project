@@ -39,7 +39,8 @@ void TrafficFlowAdjustmentTask(void *pvParameters)
 			// Grab Flow Semaphore
 			if (xSemaphoreTake(xMutexFlow, (TickType_t)10) == pdTRUE)
 			{
-				g_flowrate = speed_adc_value;
+				xQueueSend(xQueueFlowRate, *speed_adc_value, 0);
+				// g_flowrate = speed_adc_value;
 				xSemaphoreGive(xMutexFlow);
 				printf("Update Flow: %u\n", speed_adc_value);
 			}
@@ -63,7 +64,8 @@ void TrafficCreatorTask(void *pvParameters)
 		// Get Flow Semaphore
 		if (xSemaphoreTake(xMutexFlow, (TickType_t)10) == pdTRUE)
 		{
-			flowrate = g_flowrate;
+			xQueueReceive(xQueueFlowRate, &flowrate, 0);
+			// flowrate = g_flowrate;
 			xSemaphoreGive(xMutexFlow);
 			printf("CreatorTask: Accessed xMutexFlow, updated flowrate:  %u. \n", flowrate);
 		}
@@ -76,7 +78,8 @@ void TrafficCreatorTask(void *pvParameters)
 		// Get Cars Semaphore
 		if (xSemaphoreTake(xMutexCars, (TickType_t)10) == pdTRUE)
 		{
-			g_car_value = car_value;
+			xQueueSend(xQueueCars, *car_value, 0);
+			// g_car_value = car_value;
 			xSemaphoreGive(xMutexCars);
 			printf("Update car: %u\n", car_value);
 		}
@@ -100,7 +103,8 @@ void TrafficDisplayTask(void *pvParameters)
 		// Get Cars Semaphore
 		if (xSemaphoreTake(xMutexCars, (TickType_t)10) == pdTRUE)
 		{
-			car_value = g_car_value;
+			xQueueReceive(xQueueCars, &car_value, 0);
+			// car_value = g_car_value;
 			xSemaphoreGive(xMutexCars);
 		}
 		else
@@ -109,7 +113,8 @@ void TrafficDisplayTask(void *pvParameters)
 		// Get Light Semaphore
 		if (xSemaphoreTake(xMutexLight, (TickType_t)0) == pdTRUE)
 		{
-			light_colour = g_light_colour;
+			xQueueReceive(xQueueLightColour, &light_colour, 0);
+			// light_colour = g_light_colour;
 			xSemaphoreGive(xMutexLight);
 			if (light_colour)
 				printf("Updated light to Green");

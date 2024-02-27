@@ -9,7 +9,8 @@ void Green_LED_Controller_Callback(xTimerHandle xTimer)
 	// Get Light Semaphore
 	if (xSemaphoreTake(xMutexLight, (TickType_t)0) == pdTRUE)
 	{
-		g_light_colour = 0;
+		xQueueSend(xQueueLightColour, 0, 0)
+		// g_light_colour = 0;
 		xSemaphoreGive(xMutexLight);
 		printf("Red Light\n");
 	}
@@ -36,7 +37,8 @@ void Red_LED_Controller_Callback(xTimerHandle xTimer)
 	// Get Light Semaphore
 	if (xSemaphoreTake(xMutexLight, (TickType_t)0) == pdTRUE)
 	{
-		g_light_colour = 1;
+		xQueueSend(xQueueLightColour, 1, 0);
+		// g_light_colour = 1;
 		xSemaphoreGive(xMutexLight);
 		printf("Green Light\n");
 	}
@@ -57,7 +59,8 @@ void TrafficLightTask(void *pvParameters)
 		// Get Flow Semaphore
 		if (xSemaphoreTake(xMutexFlow, (TickType_t)10) == pdTRUE)
 		{
-			new_speed = g_flowrate;
+			xQueueReceive(xQueueFlowRate, &new_speed, 0);
+			// new_speed = g_flowrate;
 			xSemaphoreGive(xMutexFlow);
 			printf("New Flow %u\n", new_speed);
 		}

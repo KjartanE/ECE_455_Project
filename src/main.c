@@ -18,6 +18,10 @@ int main(void)
 	xMutexLight = xSemaphoreCreateMutex();
 	xMutexCars = xSemaphoreCreateMutex();
 
+	xQueueFlowRate = xQueueCreate(10, sizeof(uint16_t));
+	xQueueLightColour = xQueueCreate(10, sizeof(uint16_t));
+	xQueueCarValue = xQueueCreate(10, sizeof(uint16_t));
+
 	// Give mutexes if available
 	if (xMutexFlow)
 		xSemaphoreGive(xMutexFlow);
