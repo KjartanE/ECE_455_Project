@@ -1,0 +1,4 @@
+TrafficLight.c:4:6:Green_LED_Controller_Callback	32	static
+TrafficLight.c:24:6:Yellow_LED_Controller_Callback	32	static
+TrafficLight.c:34:6:Red_LED_Controller_Callback	32	static
+TrafficLight.c:55:6:TrafficLightTask	32	static

@@ -1,0 +1,6 @@
+core_cm4.h:1037:22:NVIC_SetPriorityGrouping	24	static
+main.c:17:5:main	24	static
+main.c:69:13:HardwareInit	72	static
+main.c:144:6:vApplicationMallocFailedHook	4	static
+main.c:159:6:vApplicationStackOverflowHook	16	static
+main.c:174:6:vApplicationIdleHook	16	static

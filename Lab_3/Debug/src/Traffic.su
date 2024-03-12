@@ -1,0 +1,6 @@
+Traffic.c:9:6:TrafficFlowAdjustmentTask	24	static
+Traffic.c:56:6:TrafficCreatorTask	32	static
+Traffic.c:94:6:TrafficDisplayTask	80	static
+Traffic.c:195:6:ShiftRegisterValuePreLight	16	static
+Traffic.c:208:6:ShiftRegisterValueDuringLight	16	static
+Traffic.c:221:6:ShiftRegisterValuePostLight	16	static
