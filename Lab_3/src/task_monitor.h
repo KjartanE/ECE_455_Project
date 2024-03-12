@@ -8,6 +8,6 @@
 #ifndef TASK_MONITOR_H_
 #define TASK_MONITOR_H_
 
-
+void MonitorTask(void *pvParameters);
 
 #endif /* TASK_MONITOR_H_ */

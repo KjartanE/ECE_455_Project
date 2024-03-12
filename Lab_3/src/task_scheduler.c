@@ -5,6 +5,7 @@
  *  Created on: Mar 12, 2024
  *      Author: lbare
  */
+
 void SchedulerTask(void *pvParameters)
 {
     while (1)

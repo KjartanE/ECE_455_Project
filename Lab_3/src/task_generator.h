@@ -8,6 +8,6 @@
 #ifndef TASK_GENERATOR_H_
 #define TASK_GENERATOR_H_
 
-
+void GeneratorTask(void *pvParameters);
 
 #endif /* TASK_GENERATOR_H_ */

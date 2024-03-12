@@ -1,142 +1,27 @@
 /*
  * main.c
  *
- * Traffic Light Demo ECE 455 Lab
+ * Task Scheduler Demo ECE 455 Lab
  * Kjartan Einarsson 	V00885049
  * Levi Bare 			V00965748
  */
 
 #include "STM_32_RTOS_Config.h"
-#include "TrafficLight.h"
-#include "Traffic.h"
-
-static void HardwareInit();
+#include "task_scheduler.h"
+#include "task_monitor.h"
+#include "task_generator.h"
 
 /*-----------------------------------------------------------*/
 
 int main(void)
 {
-	HardwareInit();
+	xTaskCreate(SchedulerTask, "Scheduler", configMINIMAL_STACK_SIZE, NULL, SCHEDULER_TASK_PRIORITY, NULL);
+	xTaskCreate(MonitorTask, "Monitor", configMINIMAL_STACK_SIZE, NULL, GENERATOR_TASK_PRIORITY, NULL);
+	xTaskCreate(GeneratorTask, "Generator", configMINIMAL_STACK_SIZE, NULL, MONITOR_TASK_PRIORITY, NULL);
 
-	xMutexFlow = xSemaphoreCreateMutex();
-	xMutexLight = xSemaphoreCreateMutex();
-	xMutexCars = xSemaphoreCreateMutex();
-
-//	xQueueFlowRate = xQueueCreate(1, sizeof(uint16_t));
-//	xQueueLightColour = xQueueCreate(1, sizeof(uint16_t));
-//	xQueueCarValue = xQueueCreate(1, sizeof(uint16_t));
-
-	// Give flow mutex if available
-	if (xMutexFlow)
-		xSemaphoreGive(xMutexFlow);
-	else
-		printf("Error: Flow Semaphore Unsuccessful. \n");
-
-	// Give Light mutex if available
-	if (xMutexLight)
-		xSemaphoreGive(xMutexLight);
-	else
-		printf("Error: Light Semaphore Unsuccessful. \n");
-
-	// Give Car mutex if available
-	if (xMutexCars)
-		xSemaphoreGive(xMutexCars);
-	else
-		printf("Error: Cars Semaphore Unsuccessful. \n");
-
-	// Create necessary tasks
-	xTaskCreate(TrafficCreatorTask, "Creator", configMINIMAL_STACK_SIZE, NULL, TRAFFIC_CREATE_TASK_PRIORITY, NULL);
-	xTaskCreate(TrafficLightTask, "Light", configMINIMAL_STACK_SIZE, NULL, TRAFFIC_LIGHT_TASK_PRIORITY, NULL);
-	xTaskCreate(TrafficFlowAdjustmentTask, "FlowAdjust", configMINIMAL_STACK_SIZE, NULL, TRAFFIC_FLOW_TASK_PRIORITY, NULL);
-	xTaskCreate(TrafficDisplayTask, "Display", configMINIMAL_STACK_SIZE, NULL, TRAFFIC_DISPLAY_TASK_PRIORITY, NULL);
-
-	// Create traffic light timers
-	xGreenLightSoftwareTimer = xTimerCreate("GreenLightTimer", 8000 / portTICK_PERIOD_MS, pdFALSE, (void *)0, Green_LED_Controller_Callback);
-	xYellowLightSoftwareTimer = xTimerCreate("YellowLightTimer", 2000 / portTICK_PERIOD_MS, pdFALSE, (void *)0, Yellow_LED_Controller_Callback);
-	xRedLightSoftwareTimer = xTimerCreate("RedLightTimer", 4000 / portTICK_PERIOD_MS, pdFALSE, (void *)0, Red_LED_Controller_Callback);
-
-	GPIO_SetBits(TRAFFIC_LIGHT_PORT, TRAFFIC_LIGHT_GREEN_PIN); // Turn traffic light to green
-//	xQueueOverwrite(xQueueLightColour, (uint16_t)1);
-	g_light_colour = 1;
-	xTimerStart(xGreenLightSoftwareTimer, 0); // Start traffic light timer
-
-	vTaskStartScheduler(); // Begin task scheduler
+	vTaskStartScheduler();
 
 	return 0;
-}
-
-/* Setup and initialize GPIO and ADC hardware */
-static void HardwareInit()
-{
-	NVIC_SetPriorityGrouping(0);
-
-	// GPIO Initialization
-	GPIO_InitTypeDef SHIFT_1_GPIO_InitStructure;
-	GPIO_InitTypeDef SHIFT_2_GPIO_InitStructure;
-	GPIO_InitTypeDef SHIFT_3_GPIO_InitStructure;
-	GPIO_InitTypeDef TRAFFIC_GPIO_InitStructure;
-	RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_GPIOA, ENABLE);
-	RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_GPIOB, ENABLE);
-	RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_GPIOC, ENABLE);
-	RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_GPIOD, ENABLE);
-	RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_GPIOE, ENABLE);
-
-	// Initialize ADC
-	ADC_InitTypeDef ADC_InitStructure;
-	GPIO_InitTypeDef ADC_GPIO_InitStructure;
-
-	// Output Pin
-	SHIFT_1_GPIO_InitStructure.GPIO_Pin = SHIFT_REG_1_PIN | SHIFT_REG_CLK_1_PIN;
-	SHIFT_2_GPIO_InitStructure.GPIO_Pin = SHIFT_REG_2_PIN | SHIFT_REG_CLK_2_PIN;
-	SHIFT_3_GPIO_InitStructure.GPIO_Pin = SHIFT_REG_3_PIN | SHIFT_REG_CLK_3_PIN;
-	TRAFFIC_GPIO_InitStructure.GPIO_Pin = TRAFFIC_LIGHT_RED_PIN | TRAFFIC_LIGHT_YELLOW_PIN | TRAFFIC_LIGHT_GREEN_PIN;
-	ADC_GPIO_InitStructure.GPIO_Pin = ADC_PIN;
-
-	// Output mode
-	SHIFT_1_GPIO_InitStructure.GPIO_Mode = GPIO_Mode_OUT;
-	SHIFT_2_GPIO_InitStructure.GPIO_Mode = GPIO_Mode_OUT;
-	SHIFT_3_GPIO_InitStructure.GPIO_Mode = GPIO_Mode_OUT;
-	TRAFFIC_GPIO_InitStructure.GPIO_Mode = GPIO_Mode_OUT;
-	ADC_GPIO_InitStructure.GPIO_Mode = GPIO_Mode_AN;
-
-	// Push-pull mode
-	SHIFT_1_GPIO_InitStructure.GPIO_OType = GPIO_OType_PP;
-	SHIFT_2_GPIO_InitStructure.GPIO_OType = GPIO_OType_PP;
-	SHIFT_3_GPIO_InitStructure.GPIO_OType = GPIO_OType_PP;
-	TRAFFIC_GPIO_InitStructure.GPIO_OType = GPIO_OType_PP;
-
-	// Disable pull ups and downs
-	SHIFT_1_GPIO_InitStructure.GPIO_PuPd = GPIO_PuPd_NOPULL;
-	SHIFT_2_GPIO_InitStructure.GPIO_PuPd = GPIO_PuPd_NOPULL;
-	SHIFT_3_GPIO_InitStructure.GPIO_PuPd = GPIO_PuPd_NOPULL;
-	TRAFFIC_GPIO_InitStructure.GPIO_PuPd = GPIO_PuPd_NOPULL;
-	ADC_GPIO_InitStructure.GPIO_PuPd = GPIO_PuPd_NOPULL;
-
-	// GPIO Speed for shift registers
-	SHIFT_1_GPIO_InitStructure.GPIO_Speed = GPIO_Speed_25MHz;
-
-	// Initialize GPIO
-	GPIO_Init(SHIFT_REG_1_PORT, &SHIFT_1_GPIO_InitStructure);
-	GPIO_Init(SHIFT_REG_2_PORT, &SHIFT_2_GPIO_InitStructure);
-	GPIO_Init(SHIFT_REG_3_PORT, &SHIFT_3_GPIO_InitStructure);
-	GPIO_Init(TRAFFIC_LIGHT_PORT, &TRAFFIC_GPIO_InitStructure);
-	GPIO_Init(GPIOC, &ADC_GPIO_InitStructure);
-
-	// Initialize RCC
-	RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_GPIOC, ENABLE);
-	RCC_APB2PeriphClockCmd(RCC_APB2Periph_ADC1, ENABLE);
-
-	// Initialize ADC1
-	ADC_InitStructure.ADC_Resolution = ADC_Resolution_12b;
-	ADC_InitStructure.ADC_ScanConvMode = DISABLE;
-	ADC_InitStructure.ADC_ContinuousConvMode = ENABLE;
-	ADC_InitStructure.ADC_ExternalTrigConv = DISABLE;
-	ADC_InitStructure.ADC_ExternalTrigConvEdge = ADC_ExternalTrigConvEdge_None;
-	ADC_InitStructure.ADC_DataAlign = ADC_DataAlign_Right;
-	ADC_InitStructure.ADC_NbrOfConversion = 1;
-	ADC_Init(ADC1, &ADC_InitStructure);
-	ADC_Cmd(ADC1, ENABLE);
-	ADC_RegularChannelConfig(ADC1, ADC_Channel_11, 1, ADC_SampleTime_84Cycles);
 }
 
 /*-----------------------------------------------------------*/

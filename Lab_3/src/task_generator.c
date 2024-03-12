@@ -1,3 +1,4 @@
+#include "task_generator.h"
 /*
  * task_generator.c
  *
@@ -5,4 +6,11 @@
  *      Author: lbare
  */
 
+void Gn(void *pvParameters)
+{
+    while (1)
+    {
+        vTaskDelay(1000);
+    }
+}
 
