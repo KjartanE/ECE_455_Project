@@ -12,6 +12,7 @@
 #include <stdbool.h>
 #include <stdlib.h>
 #include "stm32f4_discovery.h"
+#include "task.h"
 
 /* Kernel includes. */
 #include "stm32f4xx.h"
@@ -27,7 +28,7 @@
 #define MONITOR_TASK_PRIORITY (tskIDLE_PRIORITY)
 
 // Test Bench Parameters
-uint32_t task1_period, task1_exec_time,
+extern uint32_t task1_period, task1_exec_time,
 	task2_period, task2_exec_time,
 	task3_period, task3_exec_time;
 

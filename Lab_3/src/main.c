@@ -19,6 +19,7 @@
 QueueHandle_t schedulerQueue, monitorQueue;
 
 void get_test_params(void);
+task_params *get_current_test_bench_params(void);
 
 int main(void)
 {
@@ -27,7 +28,7 @@ int main(void)
 	schedulerQueue = xQueueCreate(10, sizeof(dd_task));
 
 	if (schedulerQueue == NULL || monitorQueue == NULL)
-		return;
+		return 0;
 
 	xTaskCreate(SchedulerTask, "Scheduler", configMINIMAL_STACK_SIZE, NULL, SCHEDULER_TASK_PRIORITY, NULL);
 	xTaskCreate(MonitorTask, "Monitor", configMINIMAL_STACK_SIZE, NULL, GENERATOR_TASK_PRIORITY, NULL);
@@ -50,6 +51,21 @@ void get_test_params(void)
 	task2_exec_time = test_params[1].exec_time;
 	task3_period = test_params[2].period;
 	task3_exec_time = test_params[2].exec_time;
+}
+
+task_params *get_current_test_bench_params()
+{
+	switch (CURRENT_TEST_BENCH)
+	{
+	case TEST_BENCH_1:
+		return test_bench_params[0];
+	case TEST_BENCH_2:
+		return test_bench_params[1];
+	case TEST_BENCH_3:
+		return test_bench_params[2];
+	default:
+		return test_bench_params[0];
+	}
 }
 
 /*-----------------------------------------------------------*/

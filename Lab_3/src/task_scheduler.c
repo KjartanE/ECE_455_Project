@@ -35,7 +35,7 @@ void create_dd_task(TaskHandle_t handle, task_type type, uint32_t id, uint32_t a
     new_task->absolute_deadline = absolute_deadline;
     new_task->completion_time = 0;
 
-    add_task_to_queue(new_task);
+    // add_task_to_queue(new_task);
 }
 
 /****************************************************************************************
@@ -44,28 +44,28 @@ void create_dd_task(TaskHandle_t handle, task_type type, uint32_t id, uint32_t a
  ****************************************************************************************/
 void delete_dd_task(uint32_t id){
 
-};
+}
 
 /****************************************************************************************
  * Sends a message to a queue requesting the Active Task List from the DDS. Once a
  * response is received from the DDS, the function returns the list.
  ****************************************************************************************/
-**dd_task_list get_active_dd_task_list(){
-
-};
+dd_task_list** get_active_dd_task_list(){
+    return NULL;
+}
 
 /****************************************************************************************
  * Sends a message to a queue requesting the Completed Task List from the DDS. Once
  * a response is received from the DDS, the function returns the list.
  ****************************************************************************************/
-**dd_task_list get_completed_dd_task_list(){
-
-};
+dd_task_list** get_completed_dd_task_list(){
+	return NULL;
+}
 
 /****************************************************************************************
  * This function sends a message to a queue requesting the Overdue Task List from the DDS.
  * Once a response is received from the DDS, the function returns the list.
  ****************************************************************************************/
-**dd_task_list get_overdue_dd_task_list(){
-
-};
+dd_task_list** get_overdue_dd_task_list(){
+	return NULL;
+}
