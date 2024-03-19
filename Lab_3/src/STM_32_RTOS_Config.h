@@ -22,8 +22,8 @@
 #include "../FreeRTOS_Source/include/timers.h"
 
 // Task priorities
-#define SCHEDULER_TASK_PRIORITY     ( tskIDLE_PRIORITY + 1 )
-#define GENERATOR_TASK_PRIORITY 	( tskIDLE_PRIORITY )
-#define MONITOR_TASK_PRIORITY       ( tskIDLE_PRIORITY )
+#define SCHEDULER_TASK_PRIORITY (tskIDLE_PRIORITY + 2)
+#define GENERATOR_TASK_PRIORITY (tskIDLE_PRIORITY + 1)
+#define MONITOR_TASK_PRIORITY (tskIDLE_PRIORITY)
 
 #endif /* STMRTOSCONFIG_H_ */
