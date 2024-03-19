@@ -5,7 +5,7 @@
  *      Author: lbare
  */
 
-#include "task.h"
+#include "STM_32_RTOS_Config.h"
 #ifndef SCHEDULER_H_
 #define SCHEDULER_H_
 

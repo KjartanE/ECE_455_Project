@@ -1,5 +1,4 @@
 #include "task_generator.h"
-#include "task.h"
 #include "task_scheduler.h"
 #include "STM_32_RTOS_Config.h"
 

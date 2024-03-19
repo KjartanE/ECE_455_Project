@@ -12,11 +12,13 @@
 #include "task_generator.h"
 #include "FreeRTOS.h"
 #include "queue.h"
-#include "task.h"
 
 /*-----------------------------------------------------------*/
 
 QueueHandle_t schedulerQueue, monitorQueue;
+uint32_t task1_period, task1_exec_time, 
+task2_period, task2_exec_time, 
+task3_period, task3_exec_time;
 
 void get_test_params(void);
 task_params *get_current_test_bench_params(void);
@@ -52,6 +54,27 @@ void get_test_params(void)
 	task3_period = test_params[2].period;
 	task3_exec_time = test_params[2].exec_time;
 }
+
+task_params test_bench_params[][3] = {
+	{
+		// Test Bench 1
+		{95, 500},
+		{150, 500},
+		{250, 750},
+	},
+	{
+		// Test Bench 2
+		{95, 250},
+		{150, 500},
+		{250, 750},
+	},
+	{
+		// Test Bench 3
+		{100, 500},
+		{200, 500},
+		{200, 500},
+	},
+};
 
 task_params *get_current_test_bench_params()
 {
