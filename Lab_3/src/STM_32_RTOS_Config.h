@@ -26,4 +26,9 @@
 #define GENERATOR_TASK_PRIORITY (tskIDLE_PRIORITY + 1)
 #define MONITOR_TASK_PRIORITY (tskIDLE_PRIORITY)
 
+// Test Bench Parameters
+uint32_t task1_period, task1_exec_time,
+	task2_period, task2_exec_time,
+	task3_period, task3_exec_time;
+
 #endif /* STMRTOSCONFIG_H_ */

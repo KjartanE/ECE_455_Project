@@ -18,10 +18,6 @@
 
 QueueHandle_t schedulerQueue, monitorQueue;
 
-uint32_t task1_period, task1_exec_time,
-	task2_period, task2_exec_time,
-	task3_period, task3_exec_time;
-
 void get_test_params(void);
 
 int main(void)
@@ -29,14 +25,12 @@ int main(void)
 	get_test_params();
 
 	schedulerQueue = xQueueCreate(10, sizeof(dd_task));
-	monitorQueue = xQueueCreate(10, sizeof(monitor_data));
 
 	if (schedulerQueue == NULL || monitorQueue == NULL)
 		return;
 
 	xTaskCreate(SchedulerTask, "Scheduler", configMINIMAL_STACK_SIZE, NULL, SCHEDULER_TASK_PRIORITY, NULL);
 	xTaskCreate(MonitorTask, "Monitor", configMINIMAL_STACK_SIZE, NULL, GENERATOR_TASK_PRIORITY, NULL);
-	xTaskCreate(GeneratorTask, "Generator", configMINIMAL_STACK_SIZE, NULL, MONITOR_TASK_PRIORITY, NULL);
 
 	xTaskCreate(Task1Generator, "Task 1 Generator", configMINIMAL_STACK_SIZE, NULL, GENERATOR_TASK_PRIORITY, NULL);
 	xTaskCreate(Task2Generator, "Task 2 Generator", configMINIMAL_STACK_SIZE, NULL, GENERATOR_TASK_PRIORITY, NULL);
