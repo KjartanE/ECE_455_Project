@@ -12,13 +12,14 @@
 
 void Task1(void *pvParameters)
 {
+    TickType_t curr;
     TickType_t prev = 0;
     TickType_t time_remaining = task1_exec_time / portTICK_PERIOD_MS;
 
     while (time_remaining > 0)
     {
         curr = xTaskGetTickCount();
-        time_remaining -= (curr == = prev) ? 0 : curr - prev;
+        time_remaining -= (curr == prev) ? 0 : curr - prev;
         prev = curr;
     }
     delete_dd_task(1);
@@ -26,13 +27,14 @@ void Task1(void *pvParameters)
 
 void Task2(void *pvParameters)
 {
+    TickType_t curr;
     TickType_t prev = 0;
     TickType_t time_remaining = task2_exec_time / portTICK_PERIOD_MS;
 
     while (time_remaining > 0)
     {
         curr = xTaskGetTickCount();
-        time_remaining -= (curr == = prev) ? 0 : curr - prev;
+        time_remaining -= (curr == prev) ? 0 : curr - prev;
         prev = curr;
     }
     delete_dd_task(2);
@@ -40,13 +42,14 @@ void Task2(void *pvParameters)
 
 void Task3(void *pvParameters)
 {
+    TickType_t curr;
     TickType_t prev = 0;
     TickType_t time_remaining = task3_exec_time / portTICK_PERIOD_MS;
 
     while (time_remaining > 0)
     {
         curr = xTaskGetTickCount();
-        time_remaining -= (curr == = prev) ? 0 : curr - prev;
+        time_remaining -= (curr == prev) ? 0 : curr - prev;
         prev = curr;
     }
     delete_dd_task(3);
@@ -54,7 +57,7 @@ void Task3(void *pvParameters)
 
 void Task1Generator(void *pvParameters)
 {
-    Task_handle_t task;
+    TaskHandle_t task;
     xTaskCreate(Task1, "Task1", configMINIMAL_STACK_SIZE, NULL, 1, &task);
 
     if (task != NULL)
@@ -68,7 +71,7 @@ void Task1Generator(void *pvParameters)
 
 void Task2Generator(void *pvParameters)
 {
-    Task_handle_t task;
+    TaskHandle_t task;
     xTaskCreate(Task2, "Task2", configMINIMAL_STACK_SIZE, NULL, 2, &task);
 
     if (task != NULL)
@@ -82,7 +85,7 @@ void Task2Generator(void *pvParameters)
 
 void Task3Generator(void *pvParameters)
 {
-    Task_handle_t task;
+    TaskHandle_t task;
     xTaskCreate(Task3, "Task3", configMINIMAL_STACK_SIZE, NULL, 3, &task);
 
     if (task != NULL)

@@ -26,7 +26,7 @@ void SchedulerTask(void *pvParameters)
 void create_dd_task(TaskHandle_t handle, task_type type, uint32_t id, uint32_t absolute_deadline)
 {
     dd_task *new_task = (dd_task *)pvPortMalloc(sizeof(dd_task));
-    if (newTask == NULL)
+    if (new_task == NULL)
         return;
     new_task->handle = handle;
     new_task->type = type;
@@ -36,38 +36,6 @@ void create_dd_task(TaskHandle_t handle, task_type type, uint32_t id, uint32_t a
     new_task->completion_time = 0;
 
     add_task_to_queue(new_task);
-}
-
-/****************************************************************************************
- * Adds a new task to the active task list. The task is inserted in order of absolute
- * deadlines.
- ****************************************************************************************/
-void add_task_to_active_list(dd_task *new_task)
-{
-    dd_task_list *newList = (struct dd_task_list *)pvPortMalloc(sizeof(struct dd_task_list));
-    if (newList == NULL)
-        return;
-
-    newList->task = *new_task;
-    newList->next = NULL;
-
-    // insert in order of absolute deadlines
-    if (active_task_list == NULL || newTask->absolute_deadline < active_task_list->task.absolute_deadline)
-    {
-        newListNode->next = active_task_list;
-        active_task_list = newListNode;
-    }
-    else
-    {
-        dd_task_list *curr = active_task_list;
-        while (curr->next != NULL && curr->next->task.absolute_deadline <= newTask->absolute_deadline)
-        {
-            curr = curr->next;
-        }
-
-        newListNode->next = curr->next;
-        curr->next = newListNode;
-    }
 }
 
 /****************************************************************************************
