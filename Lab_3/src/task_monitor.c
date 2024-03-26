@@ -2,11 +2,18 @@
  * task_monitor.c
  *
  *  Created on: Mar 12, 2024
- *      Author: lbare
+ *      Author: Levi Bare 			V00965748
+ *      Author: Kjartan Einarsson 	V00885049
  */
+
 #include "task_generator.h"
 #include "task_scheduler.h"
 
+/**
+ * @brief Task that monitors the number of active, completed, and overdue tasks
+ * 
+ * @param pvParameters 
+ */
 void MonitorTask(void *pvParameters)
 {
     while (1)

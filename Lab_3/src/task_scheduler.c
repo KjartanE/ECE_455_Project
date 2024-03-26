@@ -1,18 +1,21 @@
-#include "STM_32_RTOS_Config.h"
-#include "task_generator.h"
-#include "task_scheduler.h"
-
 /*
  * scheduler.c
  *
  *  Created on: Mar 12, 2024
- *      Author: lbare
+ *      Author: Levi Bare 			V00965748
+ *      Author: Kjartan Einarsson 	V00885049
  */
 
+#include "STM_32_RTOS_Config.h"
+#include "task_generator.h"
+#include "task_scheduler.h"
+
+// lists for active, completed, and overdue tasks
 static dd_task_list *active_task_list = NULL;
 static dd_task_list *completed_task_list = NULL;
 static dd_task_list *overdue_task_list = NULL;
 
+// message queues for communication between tasks
 void SchedulerTask(void *pvParameters)
 {
     active_task_list = NULL;
@@ -128,6 +131,9 @@ dd_task_list *get_overdue_dd_task_list()
     return NULL;
 }
 
+/****************************************************************************************
+ * This function creates a new message and sends it to the specified queue.
+ ****************************************************************************************/
 void add_message_to_queue(message_type type, dd_task *task, uint32_t id, QueueHandle_t *queue)
 {
     dd_message *message = (dd_message *)pvPortMalloc(sizeof(dd_message));
@@ -139,6 +145,9 @@ void add_message_to_queue(message_type type, dd_task *task, uint32_t id, QueueHa
     xQueueSend(queue, message, 0);
 }
 
+/****************************************************************************************
+ * This function reads messages from the specified queue and processes them accordingly.
+ ****************************************************************************************/
 void read_message_from_queue(QueueHandle_t *queue)
 {
     dd_message receivedMessage;
@@ -187,6 +196,9 @@ void read_message_from_queue(QueueHandle_t *queue)
     }
 }
 
+/****************************************************************************************
+ * This function adds a new task to the specified list.
+ ****************************************************************************************/
 void add_dd_task_to_list(dd_task_list **list, dd_task *task)
 {
     dd_task_list *newNode = (dd_task_list *)pvPortMalloc(sizeof(dd_task_list));
@@ -200,6 +212,9 @@ void add_dd_task_to_list(dd_task_list **list, dd_task *task)
     *list = newNode;
 }
 
+/****************************************************************************************
+ * This function adds a new task to the specified list in sorted order.
+ ****************************************************************************************/
 void add_dd_task_to_list_sorted(dd_task_list **list, dd_task *task)
 {
     dd_task_list *newNode = (dd_task_list *)pvPortMalloc(sizeof(dd_task_list));
@@ -228,6 +243,9 @@ void add_dd_task_to_list_sorted(dd_task_list **list, dd_task *task)
     }
 }
 
+/****************************************************************************************
+ * This function removes a task from the specified list.
+ ****************************************************************************************/
 void remove_dd_task_from_list(dd_task_list **list, uint32_t taskId)
 {
     dd_task_list *curr = *list;
@@ -253,6 +271,9 @@ void remove_dd_task_from_list(dd_task_list **list, uint32_t taskId)
     }
 }
 
+/****************************************************************************************
+ * This function checks for overdue tasks and removes them from the active task list.
+ ****************************************************************************************/
 void check_overdue_tasks()
 {
     uint32_t curr_time = xTaskGetTickCount() * portTICK_PERIOD_MS;
@@ -285,6 +306,9 @@ void check_overdue_tasks()
     remove_extra_overdue_tasks();
 }
 
+/****************************************************************************************
+ * This function removes any extra overdue tasks from the overdue task list.
+ ****************************************************************************************/
 void remove_extra_overdue_tasks()
 {
     const int max_overdue_size = 5;

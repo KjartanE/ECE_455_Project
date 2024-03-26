@@ -10,14 +10,14 @@
 #ifndef TASK_H_
 #define TASK_H_
 
+// task types
 typedef enum
 {
     PERIODIC,
     APERIODIC
 } task_type;
 
-
-
+// task struct
 typedef struct
 {
 	TaskHandle_t handle;
@@ -28,14 +28,17 @@ typedef struct
     uint32_t completion_time;
 } dd_task;
 
+// task list struct
 typedef struct dd_task_list dd_task_list;
 
+// task list struct
 struct dd_task_list
 {
     dd_task task;
     dd_task_list *next;
 };
 
+// message types
 typedef enum
 {
     CREATE,
@@ -45,6 +48,7 @@ typedef enum
 	GET_OVERDUE_LIST
 } message_type;
 
+// message struct
 typedef struct
 {
     message_type type;
@@ -52,6 +56,7 @@ typedef struct
     uint32_t id;
 } dd_message;
 
+// task parameters
 typedef struct
 {
     uint32_t exec_time;

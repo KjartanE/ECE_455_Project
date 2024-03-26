@@ -1,15 +1,18 @@
 /*
  * task_generator.c
  *
- *  Created on: Mar 12, 2024
- *      Author: lbare
- *      Author: KjartanE
+ *  Created on: Mar 26, 2024
+ *      Author: Levi Bare 			V00965748
+ *      Author: Kjartan Einarsson 	V00885049
+ *
  */
+
 #include "STM_32_RTOS_Config.h"
 #include "task_generator.h"
 #include "task_scheduler.h"
 
 
+/*-----------------------------------------------------------*/
 void Task1(void *pvParameters)
 {
     TickType_t curr;
@@ -26,6 +29,7 @@ void Task1(void *pvParameters)
     vTaskDelete(NULL);
 }
 
+/*-----------------------------------------------------------*/
 void Task2(void *pvParameters)
 {
     TickType_t curr;
@@ -42,6 +46,7 @@ void Task2(void *pvParameters)
     vTaskDelete(NULL);
 }
 
+/*-----------------------------------------------------------*/
 void Task3(void *pvParameters)
 {
     TickType_t curr;
@@ -58,6 +63,7 @@ void Task3(void *pvParameters)
     vTaskDelete(NULL);
 }
 
+/*-----------------------------------------------------------*/
 void Task1Callback(TimerHandle_t pxTimer)
 {
     TaskHandle_t task;
@@ -68,13 +74,14 @@ void Task1Callback(TimerHandle_t pxTimer)
         TickType_t curr = xTaskGetTickCount();
         create_dd_task(task, PERIODIC, 1, task1_period + curr);
         printf("Task 1 created\n");
-//        vTaskDelay(task1_period);
     }
+
     // Restart timer
 	xTimerChangePeriod(pxTimer, pdMS_TO_TICKS(task1_period), 0);
 	xTimerStart(pxTimer, 0);
 }
 
+/*-----------------------------------------------------------*/
 void Task2Callback(TimerHandle_t pxTimer)
 {
     TaskHandle_t task;
@@ -85,7 +92,6 @@ void Task2Callback(TimerHandle_t pxTimer)
         TickType_t curr = xTaskGetTickCount();
         create_dd_task(task, PERIODIC, 2, task2_period + curr);
         printf("Task 2 created\n");
-//        vTaskDelay(task2_period);
     }
 
     // Restart timer
@@ -93,6 +99,7 @@ void Task2Callback(TimerHandle_t pxTimer)
 	xTimerStart(pxTimer, 0);
 }
 
+/*-----------------------------------------------------------*/
 void Task3Callback(TimerHandle_t pxTimer)
 {
     TaskHandle_t task;
@@ -103,7 +110,6 @@ void Task3Callback(TimerHandle_t pxTimer)
         TickType_t curr = xTaskGetTickCount();
         create_dd_task(task, PERIODIC, 3, task3_period + curr);
         printf("Task 3 created\n");
-//        vTaskDelay(task3_period);
     }
 
     // Restart timer

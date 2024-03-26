@@ -1,6 +1,8 @@
 /*
  * STMRTOSconfig.h
  *
+ *      Author: Levi Bare 			V00965748
+ *      Author: Kjartan Einarsson 	V00885049
  */
 
 #ifndef STMRTOSCONFIG_H_
@@ -31,15 +33,16 @@ extern uint32_t task1_period, task1_exec_time,
 	task2_period, task2_exec_time,
 	task3_period, task3_exec_time;
 
+// Queues
 extern QueueHandle_t *messageRequestQueue;
 extern QueueHandle_t *messageResponseQueue;
 
-//TimerHandle_t task1Timer, task2Timer, task3Timer;
-
+// Test Bench values
 #define TEST_BENCH_1 1
 #define TEST_BENCH_2 2
 #define TEST_BENCH_3 3
 
+// Test Bench
 #define CURRENT_TEST_BENCH TEST_BENCH_1
 
 #endif /* STMRTOSCONFIG_H_ */

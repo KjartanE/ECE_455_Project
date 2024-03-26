@@ -2,8 +2,10 @@
  * main.c
  *
  * Task Scheduler Demo ECE 455 Lab
- * Kjartan Einarsson 	V00885049
- * Levi Bare 			V00965748
+ *
+ *  Created on: Mar 26, 2024
+ *      Author: Levi Bare 			V00965748
+ *      Author: Kjartan Einarsson 	V00885049
  */
 
 #include "STM_32_RTOS_Config.h"
@@ -26,17 +28,22 @@ task_params *get_current_test_bench_params(void);
 
 int main(void)
 {
+	// Get test parameters
 	get_test_params();
 
+	// Create message queues
 	messageRequestQueue = xQueueCreate(10, sizeof(dd_message));
 	messageResponseQueue = xQueueCreate(10, sizeof(dd_message));
 
+	// Check if message queues were created successfully
 	if (messageRequestQueue == NULL || messageResponseQueue == NULL)
 		return 0;
 
+	// Create tasks
 	xTaskCreate(SchedulerTask, "Scheduler", configMINIMAL_STACK_SIZE, NULL, SCHEDULER_TASK_PRIORITY, NULL);
 	xTaskCreate(MonitorTask, "Monitor", configMINIMAL_STACK_SIZE, NULL, GENERATOR_TASK_PRIORITY, NULL);
 
+	// Create timers
 	task1Timer = xTimerCreate("Timer1", 1, pdFALSE, (void *)0, Task1Callback);
 	task2Timer = xTimerCreate("Timer2", 1, pdFALSE, (void *)0, Task2Callback);
 	task3Timer = xTimerCreate("Timer3", 1, pdFALSE, (void *)0, Task3Callback);
@@ -46,15 +53,13 @@ int main(void)
 	xTimerStart(task2Timer, 0);
 	xTimerStart(task3Timer, 0);
 
-//	xTaskCreate(Task1Generator, "Task 1 Generator", configMINIMAL_STACK_SIZE, NULL, GENERATOR_TASK_PRIORITY, NULL);
-//	xTaskCreate(Task2Generator, "Task 2 Generator", configMINIMAL_STACK_SIZE, NULL, GENERATOR_TASK_PRIORITY, NULL);
-//	xTaskCreate(Task3Generator, "Task 3 Generator", configMINIMAL_STACK_SIZE, NULL, GENERATOR_TASK_PRIORITY, NULL);
-
+	// Start the scheduler
 	vTaskStartScheduler();
 
 	return 0;
 }
 
+// test bench parameters
 void get_test_params(void)
 {
 	task_params *test_params = get_current_test_bench_params();
@@ -66,6 +71,12 @@ void get_test_params(void)
 	task3_exec_time = test_params[2].exec_time;
 }
 
+/*-----------------------------------------------------------*/
+// Test Bench Parameters
+// Test Bench 1: {95, 500}, {150, 500}, {250, 750}
+// Test Bench 2: {95, 250}, {150, 500}, {250, 750}
+// Test Bench 3: {100, 500}, {200, 500}, {200, 500}
+/*-----------------------------------------------------------*/
 const task_params test_bench_params[][3] = {
 	{
 		// Test Bench 1
@@ -87,6 +98,7 @@ const task_params test_bench_params[][3] = {
 	},
 };
 
+// Get the current test bench parameters
 task_params *get_current_test_bench_params(void)
 {
 	switch (CURRENT_TEST_BENCH)

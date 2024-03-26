@@ -4,8 +4,8 @@
  *  Created on: Mar 12, 2024
  *      Author: lbare
  */
-#include "task.h"
 
+#include "task.h"
 
 #ifndef SCHEDULER_H_
 #define SCHEDULER_H_
