@@ -34,7 +34,7 @@ extern uint32_t task1_period, task1_exec_time,
 extern QueueHandle_t *messageRequestQueue;
 extern QueueHandle_t *messageResponseQueue;
 
-TimerHandle_t task1Timer, task2Timer, task3Timer;
+//TimerHandle_t task1Timer, task2Timer, task3Timer;
 
 #define TEST_BENCH_1 1
 #define TEST_BENCH_2 2
