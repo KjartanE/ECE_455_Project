@@ -37,6 +37,8 @@ typedef enum
 	APERIODIC
 } task_type;
 
+typedef struct dd_task_list dd_task_list;
+
 typedef struct
 {
 	TaskHandle_t handle;
@@ -47,18 +49,18 @@ typedef struct
 	uint32_t completion_time;
 } dd_task;
 
-typedef struct
+struct dd_task_list
 {
 	dd_task task;
-	struct dd_task_list *next;
-} dd_task_list;
+	dd_task_list *next;
+};
 
 typedef enum
 {
 	CREATE,
 	COMPLETE,
 	GET_ACTIVE_LIST,
-	GET_CURRENT_LIST,
+	GET_COMPLETED_LIST,
 	GET_OVERDUE_LIST
 } message_type;
 

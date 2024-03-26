@@ -50,13 +50,31 @@ void create_dd_task(TaskHandle_t handle, task_type type, uint32_t id, uint32_t a
  ****************************************************************************************/
 void delete_dd_task(uint32_t id)
 {
-    add_message_to_queue(COMPLETE, NULL, id, messageRequestQueue);
+    dd_task_list *curr = active_task_list;
+    TaskHandle_t taskHandle = NULL;
 
-    uint32_t deletedTaskId;
-    if (xQueueReceive(messageResponseQueue, &deletedTaskId, portMAX_DELAY) == pdPASS)
+    while (curr != NULL)
     {
-        if (deletedTaskId)
-            vTaskDelete(deletedTaskId);
+        if (curr->task.id == id)
+        {
+            taskHandle = curr->task.handle;
+            break;
+        }
+        curr = curr->next;
+    }
+
+    if (taskHandle != NULL)
+    {
+        add_message_to_queue(COMPLETE, NULL, id, messageRequestQueue);
+
+        uint32_t deletedTaskId;
+        if (xQueueReceive(messageResponseQueue, &deletedTaskId, portMAX_DELAY) == pdPASS)
+        {
+            if (deletedTaskId == id)
+            {
+                vTaskDelete(taskHandle);
+            }
+        }
     }
 }
 
@@ -67,7 +85,7 @@ void delete_dd_task(uint32_t id)
 dd_task_list *get_active_dd_task_list()
 {
     dd_task_list *list;
-    add_message_to_queue(GET_LIST, NULL, active_task_list, messageRequestQueue);
+    add_message_to_queue(GET_ACTIVE_LIST, &active_task_list->task, 0, messageRequestQueue);
 
     if (xQueueReceive(messageResponseQueue, &list, portMAX_DELAY) == pdPASS)
     {
@@ -84,7 +102,7 @@ dd_task_list *get_active_dd_task_list()
 dd_task_list *get_completed_dd_task_list()
 {
     dd_task_list *list;
-    add_message_to_queue(GET_LIST, NULL, completed_task_list, messageRequestQueue);
+    add_message_to_queue(GET_COMPLETED_LIST, &completed_task_list->task, 0, messageRequestQueue);
 
     if (xQueueReceive(messageResponseQueue, &list, portMAX_DELAY) == pdPASS)
     {
@@ -101,7 +119,7 @@ dd_task_list *get_completed_dd_task_list()
 dd_task_list *get_overdue_dd_task_list()
 {
     dd_task_list *list;
-    add_message_to_queue(GET_LIST, NULL, overdue_task_list, messageRequestQueue);
+    add_message_to_queue(GET_OVERDUE_LIST, &overdue_task_list->task, 0, messageRequestQueue);
 
     if (xQueueReceive(messageResponseQueue, &list, portMAX_DELAY) == pdPASS)
     {
