@@ -78,13 +78,13 @@ task_params *get_current_test_bench_params(void)
 	switch (CURRENT_TEST_BENCH)
 	{
 	case TEST_BENCH_1:
-		return test_bench_params[0];
+		return (task_params *)test_bench_params[0];
 	case TEST_BENCH_2:
-		return test_bench_params[1];
+		return (task_params *)test_bench_params[1];
 	case TEST_BENCH_3:
-		return test_bench_params[2];
+		return (task_params *)test_bench_params[2];
 	default:
-		return test_bench_params[0];
+		return (task_params *)test_bench_params[0];
 	}
 }
 

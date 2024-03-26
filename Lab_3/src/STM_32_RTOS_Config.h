@@ -36,18 +36,6 @@ extern uint32_t task1_period, task1_exec_time,
 	task2_period, task2_exec_time,
 	task3_period, task3_exec_time;
 
-struct dd_task_list
-{
-	dd_task task;
-	dd_task_list *next;
-};
-
-#define TEST_BENCH_1 1
-#define TEST_BENCH_2 2
-#define TEST_BENCH_3 3
-
-#define CURRENT_TEST_BENCH TEST_BENCH_1
-
 extern QueueHandle_t *messageRequestQueue;
 extern QueueHandle_t *messageResponseQueue;
 

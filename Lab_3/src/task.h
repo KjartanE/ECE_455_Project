@@ -19,6 +19,8 @@ typedef enum
     APERIODIC
 } task_type;
 
+
+
 typedef struct
 {
 	TaskHandle_t handle;
@@ -29,11 +31,13 @@ typedef struct
     uint32_t completion_time;
 } dd_task;
 
-typedef struct
+typedef struct dd_task_list dd_task_list;
+
+struct dd_task_list
 {
     dd_task task;
-    struct dd_task_list *next;
-} dd_task_list;
+    dd_task_list *next;
+};
 
 typedef enum
 {
@@ -62,41 +66,5 @@ typedef struct
 #define TEST_BENCH_3 3
 
 #define CURRENT_TEST_BENCH TEST_BENCH_1
-
-//const task_params test_bench_params[][3] = {
-//    {
-//        // Test Bench 1
-//        {95, 500},
-//        {150, 500},
-//        {250, 750},
-//    },
-//    {
-//        // Test Bench 2
-//        {95, 250},
-//        {150, 500},
-//        {250, 750},
-//    },
-//    {
-//        // Test Bench 3
-//        {100, 500},
-//        {200, 500},
-//        {200, 500},
-//    },
-//};
-//
-//const task_params *get_current_test_bench_params()
-//{
-//    switch (CURRENT_TEST_BENCH)
-//    {
-//    case TEST_BENCH_1:
-//        return test_bench_params[0];
-//    case TEST_BENCH_2:
-//        return test_bench_params[1];
-//    case TEST_BENCH_3:
-//        return test_bench_params[2];
-//    default:
-//        return test_bench_params[0];
-//    }
-//}
 
 #endif /* TASK_H_ */
