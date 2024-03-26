@@ -1,7 +1,6 @@
-#include "task_scheduler.h"
-#include <stdint.h>
-#include "task.h"
 #include "STM_32_RTOS_Config.h"
+#include "task_generator.h"
+#include "task_scheduler.h"
 
 /*
  * scheduler.c

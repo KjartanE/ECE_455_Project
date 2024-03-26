@@ -1,12 +1,11 @@
-#include "task_monitor.h"
-#include "STM_32_RTOS_Config.h"
-#include "task_scheduler.h"
 /*
  * task_monitor.c
  *
  *  Created on: Mar 12, 2024
  *      Author: lbare
  */
+#include "task_generator.h"
+#include "task_scheduler.h"
 
 void MonitorTask(void *pvParameters)
 {

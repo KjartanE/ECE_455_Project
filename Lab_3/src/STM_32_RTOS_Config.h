@@ -12,11 +12,6 @@
 #include <stdbool.h>
 #include <stdlib.h>
 #include "stm32f4_discovery.h"
-#include "task.h"
-#include "task_scheduler.h"
-#include "task_generator.h"
-#include "task_monitor.h"
-
 
 /* Kernel includes. */
 #include "stm32f4xx.h"
@@ -38,5 +33,13 @@ extern uint32_t task1_period, task1_exec_time,
 
 extern QueueHandle_t *messageRequestQueue;
 extern QueueHandle_t *messageResponseQueue;
+
+TimerHandle_t task1Timer, task2Timer, task3Timer;
+
+#define TEST_BENCH_1 1
+#define TEST_BENCH_2 2
+#define TEST_BENCH_3 3
+
+#define CURRENT_TEST_BENCH TEST_BENCH_1
 
 #endif /* STMRTOSCONFIG_H_ */

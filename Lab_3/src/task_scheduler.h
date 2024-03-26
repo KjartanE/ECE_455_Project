@@ -4,7 +4,7 @@
  *  Created on: Mar 12, 2024
  *      Author: lbare
  */
-#include "STM_32_RTOS_Config.h"
+#include "task.h"
 
 
 #ifndef SCHEDULER_H_

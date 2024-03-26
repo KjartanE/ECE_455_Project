@@ -7,6 +7,9 @@
  */
 
 #include "STM_32_RTOS_Config.h"
+#include "task_generator.h"
+#include "task_scheduler.h"
+#include "task_monitor.h"
 
 
 /*-----------------------------------------------------------*/
@@ -32,9 +35,18 @@ int main(void)
 	xTaskCreate(SchedulerTask, "Scheduler", configMINIMAL_STACK_SIZE, NULL, SCHEDULER_TASK_PRIORITY, NULL);
 	xTaskCreate(MonitorTask, "Monitor", configMINIMAL_STACK_SIZE, NULL, GENERATOR_TASK_PRIORITY, NULL);
 
-	xTaskCreate(Task1Generator, "Task 1 Generator", configMINIMAL_STACK_SIZE, NULL, GENERATOR_TASK_PRIORITY, NULL);
-	xTaskCreate(Task2Generator, "Task 2 Generator", configMINIMAL_STACK_SIZE, NULL, GENERATOR_TASK_PRIORITY, NULL);
-	xTaskCreate(Task3Generator, "Task 3 Generator", configMINIMAL_STACK_SIZE, NULL, GENERATOR_TASK_PRIORITY, NULL);
+	task1Timer = xTimerCreate("Timer1", 1, pdFALSE, (void *)0, Task1Callback);
+	task2Timer = xTimerCreate("Timer2", 1, pdFALSE, (void *)0, Task2Callback);
+	task3Timer = xTimerCreate("Timer3", 1, pdFALSE, (void *)0, Task3Callback);
+
+	// Start generator timers
+	xTimerStart(task1Timer, 0);
+	xTimerStart(task2Timer, 0);
+	xTimerStart(task3Timer, 0);
+
+//	xTaskCreate(Task1Generator, "Task 1 Generator", configMINIMAL_STACK_SIZE, NULL, GENERATOR_TASK_PRIORITY, NULL);
+//	xTaskCreate(Task2Generator, "Task 2 Generator", configMINIMAL_STACK_SIZE, NULL, GENERATOR_TASK_PRIORITY, NULL);
+//	xTaskCreate(Task3Generator, "Task 3 Generator", configMINIMAL_STACK_SIZE, NULL, GENERATOR_TASK_PRIORITY, NULL);
 
 	vTaskStartScheduler();
 

@@ -3,12 +3,9 @@
  *
  *  Created on: Mar 12, 2024
  *      Author: lbare
+ *      Author: KjartanE
  */
-#include "../FreeRTOS_Source/include/FreeRTOS.h"
-#include "../FreeRTOS_Source/include/queue.h"
-#include "../FreeRTOS_Source/include/semphr.h"
-#include "../FreeRTOS_Source/include/task.h"
-#include "../FreeRTOS_Source/include/timers.h"
+#include "STM_32_RTOS_Config.h"
 
 #ifndef TASK_H_
 #define TASK_H_
@@ -60,11 +57,5 @@ typedef struct
     uint32_t exec_time;
     uint32_t period;
 } task_params;
-
-#define TEST_BENCH_1 1
-#define TEST_BENCH_2 2
-#define TEST_BENCH_3 3
-
-#define CURRENT_TEST_BENCH TEST_BENCH_1
 
 #endif /* TASK_H_ */
