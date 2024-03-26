@@ -15,10 +15,10 @@
 
 /*-----------------------------------------------------------*/
 
-QueueHandle_t schedulerQueue, monitorQueue;
-uint32_t task1_period, task1_exec_time, 
-task2_period, task2_exec_time, 
-task3_period, task3_exec_time;
+QueueHandle_t *messageRequestQueue, *messageResponseQueue;
+uint32_t task1_period, task1_exec_time,
+	task2_period, task2_exec_time,
+	task3_period, task3_exec_time;
 
 void get_test_params(void);
 task_params *get_current_test_bench_params(void);
@@ -27,9 +27,10 @@ int main(void)
 {
 	get_test_params();
 
-	schedulerQueue = xQueueCreate(10, sizeof(dd_task));
+	messageRequestQueue = xQueueCreate(10, sizeof(dd_message));
+	messageResponseQueue = xQueueCreate(10, sizeof(dd_message));
 
-	if (schedulerQueue == NULL || monitorQueue == NULL)
+	if (messageRequestQueue == NULL || messageResponseQueue == NULL)
 		return 0;
 
 	xTaskCreate(SchedulerTask, "Scheduler", configMINIMAL_STACK_SIZE, NULL, SCHEDULER_TASK_PRIORITY, NULL);

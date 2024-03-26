@@ -57,7 +57,9 @@ typedef enum
 {
 	CREATE,
 	COMPLETE,
-	GET_LIST,
+	GET_ACTIVE_LIST,
+	GET_CURRENT_LIST,
+	GET_OVERDUE_LIST
 } message_type;
 
 typedef struct
@@ -80,5 +82,7 @@ typedef struct
 #define CURRENT_TEST_BENCH TEST_BENCH_1
 
 extern task_params test_bench_params[][3];
+extern QueueHandle_t *messageRequestQueue;
+extern QueueHandle_t *messageResponseQueue;
 
 #endif /* STMRTOSCONFIG_H_ */
