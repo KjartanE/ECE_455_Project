@@ -4,8 +4,9 @@
  *  Created on: Mar 12, 2024
  *      Author: lbare
  */
-
 #include "STM_32_RTOS_Config.h"
+
+
 #ifndef SCHEDULER_H_
 #define SCHEDULER_H_
 

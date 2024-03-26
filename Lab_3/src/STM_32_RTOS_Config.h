@@ -12,6 +12,11 @@
 #include <stdbool.h>
 #include <stdlib.h>
 #include "stm32f4_discovery.h"
+#include "task.h"
+#include "task_scheduler.h"
+#include "task_generator.h"
+#include "task_monitor.h"
+
 
 /* Kernel includes. */
 #include "stm32f4xx.h"
@@ -31,51 +36,11 @@ extern uint32_t task1_period, task1_exec_time,
 	task2_period, task2_exec_time,
 	task3_period, task3_exec_time;
 
-typedef enum
-{
-	PERIODIC,
-	APERIODIC
-} task_type;
-
-typedef struct dd_task_list dd_task_list;
-
-typedef struct
-{
-	TaskHandle_t handle;
-	task_type type;
-	uint32_t id;
-	uint32_t release_time;
-	uint32_t absolute_deadline;
-	uint32_t completion_time;
-} dd_task;
-
 struct dd_task_list
 {
 	dd_task task;
 	dd_task_list *next;
 };
-
-typedef enum
-{
-	CREATE,
-	COMPLETE,
-	GET_ACTIVE_LIST,
-	GET_COMPLETED_LIST,
-	GET_OVERDUE_LIST
-} message_type;
-
-typedef struct
-{
-	message_type type;
-	dd_task task;
-	uint32_t id;
-} dd_message;
-
-typedef struct
-{
-	uint32_t exec_time;
-	uint32_t period;
-} task_params;
 
 #define TEST_BENCH_1 1
 #define TEST_BENCH_2 2
@@ -83,7 +48,6 @@ typedef struct
 
 #define CURRENT_TEST_BENCH TEST_BENCH_1
 
-extern task_params test_bench_params[][3];
 extern QueueHandle_t *messageRequestQueue;
 extern QueueHandle_t *messageResponseQueue;
 

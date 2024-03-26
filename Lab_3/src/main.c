@@ -7,11 +7,7 @@
  */
 
 #include "STM_32_RTOS_Config.h"
-#include "task_scheduler.h"
-#include "task_monitor.h"
-#include "task_generator.h"
-#include "FreeRTOS.h"
-#include "queue.h"
+
 
 /*-----------------------------------------------------------*/
 
@@ -56,7 +52,7 @@ void get_test_params(void)
 	task3_exec_time = test_params[2].exec_time;
 }
 
-task_params test_bench_params[][3] = {
+const task_params test_bench_params[][3] = {
 	{
 		// Test Bench 1
 		{95, 500},
@@ -77,7 +73,7 @@ task_params test_bench_params[][3] = {
 	},
 };
 
-task_params *get_current_test_bench_params()
+task_params *get_current_test_bench_params(void)
 {
 	switch (CURRENT_TEST_BENCH)
 	{
